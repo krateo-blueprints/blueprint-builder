@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "My Blueprint",
+  "title": "Blueprint Builder",
   "description": "Replace this with what the blueprint provisions. This text is what an author reads above the create form.",
   "type": "object",
   "additionalProperties": false,

@@ -1,12 +1,12 @@
 apiVersion: v2
 
 # THE CHART NAME BECOMES THE API. core-provider pascalizes this into the generated CRD's Kind
-# (`my-blueprint` -> `MyBlueprint`, plural `myblueprints`), and the chart VERSION becomes the served
+# (`blueprint-builder` -> `BlueprintBuilder`, plural `blueprintbuilders`), and the chart VERSION becomes the served
 # apiVersion (`1.2.0` -> `composition.krateo.io/v1-2-0`). So renaming the chart renames the Kind
 # people install, and every release mints a new GVK with its own controller Deployment.
 #
 # Rename this to name what the blueprint PROVISIONS.
-name: my-blueprint
+name: blueprint-builder
 
 description: >-
   A Krateo blueprint — a Helm chart that core-provider turns into a CRD, so a claim of that Kind

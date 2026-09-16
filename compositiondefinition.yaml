@@ -12,10 +12,10 @@
 apiVersion: core.krateo.io/v1alpha1
 kind: CompositionDefinition
 metadata:
-  name: my-blueprint
-  namespace: my-blueprint-system
+  name: blueprint-builder
+  namespace: blueprint-builder-system
 spec:
   chart:
     # oci://ghcr.io/<owner>/charts/<chart name> — what release-tag.yaml pushes to.
-    url: oci://ghcr.io/krateo-blueprints/charts/my-blueprint
+    url: oci://ghcr.io/krateo-blueprints/charts/blueprint-builder
     version: CHART_VERSION

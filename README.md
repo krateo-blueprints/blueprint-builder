@@ -10,7 +10,7 @@ form's *Scaffold from* field), rename the chart, replace the example resource, t
 
 | | |
 |---|---|
-| `chart/Chart.yaml` `name:` | **becomes the CRD Kind** — `my-blueprint` → `MyBlueprint`, plural `myblueprints` |
+| `chart/Chart.yaml` `name:` | **becomes the CRD Kind** — `blueprint-builder` → `BlueprintBuilder`, plural `blueprintbuilders` |
 | `chart/values.schema.json` | **is** the generated CRD's `spec`. No schema, no CRD, not installable |
 | `chart/values.yaml` | defaults, kept in step with the schema |
 | `chart/templates/` | what the blueprint actually provisions — delete the example |
@@ -45,7 +45,7 @@ Two consequences worth knowing before you hit them:
 3. **Register** — apply the stamped `CompositionDefinition` from the release:
 
    ```bash
-   kubectl create namespace my-blueprint-system
+   kubectl create namespace blueprint-builder-system
    kubectl apply -f https://github.com/<owner>/<repo>/releases/download/<tag>/compositiondefinition.yaml
    ```
 
@@ -59,5 +59,5 @@ Two consequences worth knowing before you hit them:
 `helm template` refuses the `CHART_VERSION` placeholder, so pass a version:
 
 ```bash
-helm template example chart --namespace my-blueprint-system --version 0.1.0
+helm template example chart --namespace blueprint-builder-system --version 0.1.0
 ```
