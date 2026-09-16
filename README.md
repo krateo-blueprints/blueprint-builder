@@ -1,4 +1,4 @@
-# blueprint-template
+# blueprint-page-template
 
 A starting point for a **Krateo blueprint** — a Helm chart that core-provider turns into a CRD, so
 a claim of that Kind provisions everything the chart declares.
