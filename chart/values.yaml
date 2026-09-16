@@ -1,0 +1,6 @@
+# Defaults for every value the blueprint accepts.
+#
+# Keep these in step with values.schema.json: the SCHEMA becomes the generated CRD's spec, and a
+# value with no schema entry cannot be set on a claim at all — it is simply unreachable.
+name: example
+replicas: 1

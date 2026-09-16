@@ -1,0 +1,18 @@
+{{/*
+  One trivial resource, so a freshly scaffolded blueprint installs and does something observable.
+  Delete it and declare what your blueprint actually provisions.
+
+  Everything under .Values is validated by values.schema.json — which IS the generated CRD's spec,
+  so a claim can only ever set what the schema describes.
+*/}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-example
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  name: {{ .Values.name | quote }}
+  replicas: {{ .Values.replicas | quote }}

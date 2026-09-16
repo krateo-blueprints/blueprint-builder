@@ -1,0 +1,30 @@
+apiVersion: v2
+
+# THE CHART NAME BECOMES THE API. core-provider pascalizes this into the generated CRD's Kind
+# (`my-blueprint` -> `MyBlueprint`, plural `myblueprints`), and the chart VERSION becomes the served
+# apiVersion (`1.2.0` -> `composition.krateo.io/v1-2-0`). So renaming the chart renames the Kind
+# people install, and every release mints a new GVK with its own controller Deployment.
+#
+# Rename this to name what the blueprint PROVISIONS.
+name: my-blueprint
+
+description: >-
+  A Krateo blueprint — a Helm chart that core-provider turns into a CRD, so a claim of that Kind
+  provisions everything the chart declares.
+
+type: application
+
+# Substituted at release by .github/workflows/release-tag.yaml from the git tag. Leave as-is;
+# `helm template` will refuse the placeholder, which is expected (see README for local rendering).
+version: CHART_VERSION
+appVersion: CHART_VERSION
+
+home: https://krateo.io
+icon: https://raw.githubusercontent.com/krateo-platformops/.github/main/brand/logo.svg
+keywords:
+  - krateo
+  - blueprint
+  - composable
+annotations:
+  krateo.io/category: application
+  krateo.io/maturity: alpha
