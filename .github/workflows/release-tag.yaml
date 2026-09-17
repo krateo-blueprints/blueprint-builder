@@ -72,6 +72,44 @@ jobs:
             echo "::endgroup::"
           done
 
+      - name: Check the published packages are reachable by the people meant to install them
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # A GHCR package INHERITS the visibility of the repository that published it, and there is
+          # NO REST API to change it afterwards (PATCH .../packages/container/<pkg>/visibility and
+          # .../packages/container/<pkg> both return 404 — verified). So a blueprint published from a
+          # private repository produces a private OCI artifact, and the whole point of publishing it
+          # — somebody ELSE installing it from the marketplace — silently does not work. Nothing
+          # about the push fails; the chart is simply unreachable to everyone but this org.
+          #
+          # This cannot be fixed here, so it is surfaced here instead of being discovered by the
+          # person it fails for. A private repo is a legitimate choice, so this warns rather than
+          # fails the release.
+          private=$(gh api "repos/${GITHUB_REPOSITORY}" --jq .private)
+          {
+            echo "### Helm chart published"
+            echo
+            echo "\`${OCI_REPO}\`  \`${VERSION}\`"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "${private}" = "true" ]; then
+            {
+              echo "> [!WARNING]"
+              echo "> **This repository is private, so the published package is private too.**"
+              echo "> GHCR packages inherit repository visibility and it cannot be changed through the API."
+              echo "> Anyone installing this blueprint from the marketplace will get \`unauthorized\`."
+              echo ">"
+              echo "> To make it installable: make this repository **public** (Settings -> General ->"
+              echo "> Danger Zone -> Change visibility), then re-run this release. Already-published"
+              echo "> versions stay private until the package visibility is changed in Package settings."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning title=Package is private::Published to a private repo — the artifact is not installable by others. See the job summary."
+          else
+            echo "> Repository is public, so the package is public and installable." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Publish the stamped CompositionDefinitions on the release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
