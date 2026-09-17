@@ -61,3 +61,29 @@ Two consequences worth knowing before you hit them:
 ```bash
 helm template example chart --namespace blueprint-builder-system --version 0.1.0
 ```
+
+## Publishing a blueprint others can install
+
+The release workflow packages every chart here and pushes it to
+`oci://ghcr.io/<owner>/charts/<chart>:<tag>` on a semver tag, and attaches the stamped
+`CompositionDefinition` to the GitHub release.
+
+**The repository must be PUBLIC for anyone else to install the result.** A GHCR package inherits the
+visibility of the repository that published it, and there is no API to change it afterwards — both
+`PATCH /orgs/{org}/packages/container/{pkg}/visibility` and `PATCH .../{pkg}` return 404. Published
+from a private repo, the chart pushes fine and then fails at install with `unauthorized` for everyone
+outside the org. The release workflow checks this and writes a warning into the job summary rather
+than letting it be discovered by the person it fails for.
+
+The loop this closes: author a blueprint -> publish it -> the tag builds a public OCI chart ->
+register the `CompositionDefinition` -> it appears in the marketplace -> someone else installs it.
+
+## `.krateoignore`
+
+When this repo SEEDS another (a builder publish sets `source.url`), git-provider reads
+`.krateoignore` from the root and skips what it lists. `chart/` and `README.md` are excluded: a
+seeded repo receives its own composed chart, and copying the example in beside it would make the
+release workflow publish two charts and ship the example ConfigMap to whoever installs the result.
+
+GitHub's own "Use this template" ignores that file, so the hand-authored path still gets the complete
+example.
